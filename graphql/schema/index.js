@@ -1,4 +1,4 @@
-const { buildSchema } = require("graphql");
+const { buildSchema } = require('graphql')
 
 module.exports = buildSchema(`
        type Hotel {
@@ -43,6 +43,12 @@ input RoomInput {
   price: Float!
   description: String!
   }
+input UpdateRoomInput {
+  roomNumber: Int
+  roomType: String
+  price: Float
+  description: String
+}
      
 type RootQuery {
          hotels: [Hotel!]!
@@ -50,11 +56,13 @@ type RootQuery {
          login(email: String!, password: String!): AuthData!
        }
        type RootMutation {
-           createHotel(hotelInput: HotelInput): Hotel
-           createRoom(roomInput: RoomInput): Room
+           addHotel(hotelInput: HotelInput): Hotel
+           addRoom(roomInput: RoomInput): Room
+           updateRoom(updateRoomInput: UpdateRoomInput): Room
+           deleteRoom(id: ID!): Boolean!
        }
         schema {
           query: RootQuery
           mutation: RootMutation
         }
-    `);
+    `)
