@@ -1,21 +1,21 @@
-const Room = require('../../models/room.model')
-const Hotel = require('../../models/hotel.model')
-const { hotel, rooms } = require('./merge')
+const Room = require("../../models/room.model");
+const Hotel = require("../../models/hotel.model");
+const { hotel, rooms } = require("./merge");
 
 module.exports = {
   rooms: async () => {
     try {
-      const rooms = await Room.find()
+      const rooms = await Room.find();
       return rooms.map((room) => {
-        return { ...room._doc, hotel: hotel.bind(this, room._doc.hotel) }
-      })
+        return { ...room._doc, hotel: hotel.bind(this, room._doc.hotel) };
+      });
     } catch (err) {
-      throw err
+      throw err;
     }
   },
   addRoom: async (args, req) => {
     if (!req.isAuth) {
-      throw new Error('Unauthorized')
+      throw new Error("Unauthorized");
     }
     const room = new Room({
       roomNumber: args.roomInput.roomNumber,
@@ -23,23 +23,23 @@ module.exports = {
       price: args.roomInput.price,
       description: args.roomInput.description,
       hotel: req.hotelId,
-    })
-    let addedRoom
+    });
+    let addedRoom;
     try {
-      const result = await room.save()
+      const result = await room.save();
       addedRoom = {
         ...result._doc,
         hotel: rooms.bind(this, result._doc.hotel),
-      }
-      const hotel = await Hotel.findById(req.hotelId)
+      };
+      const hotel = await Hotel.findById(req.hotelId);
       if (!hotel) {
-        throw new Error('Hotel not Registered')
+        throw new Error("Hotel not Registered");
       }
-      hotel.rooms.push(room)
-      await hotel.save()
-      return addedRoom
+      hotel.rooms.push(room);
+      await hotel.save();
+      return addedRoom;
     } catch (err) {
-      throw err
+      throw err;
     }
   },
   updateRoom: async (args) => {
@@ -49,20 +49,20 @@ module.exports = {
         roomType: args.updateRoomInput.roomType,
         price: args.updateRoomInput.price,
         description: args.updateRoomInput.description,
-      })
-      return room
+      });
+      return room;
     } catch (err) {
-      throw err
+      throw err;
     }
   },
   deleteRoom: async (args) => {
     try {
-      await Room.findOneAndRemove({ _id: args.id })
-      console.log('Successfully delete the file')
-      return true
+      await Room.findOneAndRemove({ _id: args.id });
+      console.log("Successfully delete the room");
+      return true;
     } catch (err) {
-      console.log('Error while deleting the file', err.message)
-      return false
+      console.log("Error while deleting the room", err.message);
+      return false;
     }
   },
-}
+};

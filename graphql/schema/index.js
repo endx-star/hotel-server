@@ -1,4 +1,4 @@
-const { buildSchema } = require('graphql')
+const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
        type Hotel {
@@ -48,6 +48,10 @@ input UpdateRoomInput {
   roomType: String
   price: Float
   description: String
+} 
+
+input UpdateVerify {
+  verified: Boolean
 }
      
 type RootQuery {
@@ -60,9 +64,10 @@ type RootQuery {
            addRoom(roomInput: RoomInput): Room
            updateRoom(updateRoomInput: UpdateRoomInput): Room
            deleteRoom(id: ID!): Boolean!
+           updateVerification(updateVerify: UpdateVerify): Hotel
        }
         schema {
           query: RootQuery
           mutation: RootMutation
         }
-    `)
+    `);

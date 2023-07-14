@@ -6,17 +6,18 @@ module.exports = (req, res, next) => {
     req.isAuth = false;
     return next();
   }
-  const token = authHeader.split("")[1];
+  const token = authHeader.split(" ")[1];
   if (!token || token === "") {
     isAuth = false;
     return next();
   }
-  try {
-    const decodedToken = jwt.verify(token, "supersecretkey");
-  } catch (err) {
-    isAuth = false;
-    return next();
-  }
+  // try {
+  //   const decodedToken = jwt.verify(token, "supersecretkey");
+  // } catch (err) {
+  //   isAuth = false;
+  //   return next();
+  // }
+  const decodedToken = jwt.verify(token, "supersecretkey");
   if (!decodedToken) {
     isAuth = false;
     return next();
