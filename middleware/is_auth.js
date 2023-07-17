@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
   //   isAuth = false;
   //   return next();
   // }
-  const decodedToken = jwt.verify(token, "supersecretkey");
+  const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
   if (!decodedToken) {
     isAuth = false;
     return next();

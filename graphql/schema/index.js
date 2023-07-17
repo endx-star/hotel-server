@@ -3,7 +3,7 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
        type Hotel {
         _id: ID!
-        hotelName: String!
+        name: String!
         location: String!
         phoneNumber: String!
         email: String!
@@ -13,7 +13,7 @@ module.exports = buildSchema(`
 }
 
 input HotelInput {
-    hotelName: String!
+    name: String!
     location: String!
     phoneNumber:String!
     email: String!

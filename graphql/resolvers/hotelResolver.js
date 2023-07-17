@@ -6,7 +6,6 @@ module.exports = {
   hotels: async () => {
     try {
       const hotels = await Hotel.find();
-      console.log(hotels);
       return hotels.map((hotel) => {
         return { ...hotel._doc, _id: hotel._doc._id.toString() };
       });
@@ -16,17 +15,13 @@ module.exports = {
   },
   addHotel: async (args) => {
     try {
-      const existingHotel = await Hotel.findOne(
-        { hotelName: args.hotelInput.hotelName } || {
-            phoneNumber: args.hotelInput.phoneNumber,
-          } || { email: args.hotelInput.email }
-      );
+      const existingHotel = await Hotel.findOne({ name: args.hotelInput.name });
       if (existingHotel) {
         throw new Error("This Hotel is already Registered");
       }
       const hashedPassword = await bcrypt.hash(args.hotelInput.password, 12);
       const hotel = new Hotel({
-        hotelName: args.hotelInput.hotelName,
+        name: args.hotelInput.name,
         location: args.hotelInput.location,
         phoneNumber: args.hotelInput.phoneNumber,
         email: args.hotelInput.email,
@@ -34,7 +29,7 @@ module.exports = {
         password: hashedPassword,
       });
       const result = await hotel.save();
-      const token = jwt.sign({ hotelId: result.id }, "supersecretkey", {
+      const token = jwt.sign({ ...result.toObject() }, process.env.TOKEN_KEY, {
         expiresIn: "1h",
       });
       return { ...result._doc, password: null };
@@ -53,7 +48,7 @@ module.exports = {
     }
     const token = jwt.sign(
       { hotelId: hotel.id, email: hotel.email },
-      "supersecretkey",
+      process.env.TOKEN_KEY,
       { expiresIn: "1h" }
     );
     return { hotelId: hotel.id, token: token, tokenExpiration: 1 };
