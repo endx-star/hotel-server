@@ -32,11 +32,37 @@ module.exports = {
       const token = jwt.sign({ ...result.toObject() }, process.env.TOKEN_KEY, {
         expiresIn: "1h",
       });
-      return { ...result._doc, password: null };
+      return { ...result._doc, token: token };
     } catch (err) {
       throw err;
     }
   },
+  // addHotel: async (_, { hotelInput }) => {
+  //   try {
+  //     const { name, phoneNumber, email, password } = hotelInput;
+  //     if (!name || !phoneNumber || !email || !password) {
+  //       throw new Error("Please enter all the required fields");
+  //     }
+
+  //     const hotels = await Hotel.find();
+  //     const existingHotel = hotels.find((hot) => {
+  //       hot.name.toLowerCase() === name.toLowerCase();
+  //     });
+  //     if (existingHotel) {
+  //       throw new Error("This Hotel is already Registered");
+  //     }
+  //     const hashedPassword = await bcrypt.hash(password, 12);
+  //     const hotel = new Hotel({
+  //       ...hotelInput,
+  //       password: hashedPassword,
+  //     });
+  //     const result = await hotel.save();
+  //     const token = jwt.sign({ ...result.toObject() }, process.env.TOKEN_KEY);
+  //     return { ...result.toObject(), token };
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // },
   login: async ({ email, password }) => {
     const hotel = await Hotel.findOne({ email: email });
     if (!hotel) {

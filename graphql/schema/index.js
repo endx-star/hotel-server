@@ -7,7 +7,7 @@ module.exports = buildSchema(`
         location: String!
         phoneNumber: String!
         email: String!
-        photo: [String!]
+        photo: [String]
         password: String
         rooms:[Room!]
 }
@@ -17,7 +17,7 @@ input HotelInput {
     location: String!
     phoneNumber:String!
     email: String!
-    photo: [String!]
+    photo: [String]
     password: String!
 
 }
